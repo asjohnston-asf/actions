@@ -1,30 +1,64 @@
-name: test json file
+name: Deploy DAAC Stacks to AWS
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
-    inputs:
-      INPUT_A:
-        description: "S3 Bucket for CloudFormation deployment artifacts"
-        required: true
-      INPUT_B:
-        description: "Name of the deployed stack"
-        required: true
 
 jobs:
-  create-json:
+  deploy:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - environment: hyp3-edc-uat
+            api_name: hyp3-test
+            template_bucket: cf-templates-118ylv0o6jp2n-us-west-2
+            image_tag: test
+            product_lifetime_in_days: 14
+            default_credits_per_user: 10000
+            default_application_status: APPROVED
+            cost_profile: EDC
+            deploy_ref: refs/heads/develop
+            job_files: >-
+              job_spec/AUTORIFT.yml
+              job_spec/INSAR_GAMMA.yml
+              job_spec/RTC_GAMMA.yml
+              job_spec/INSAR_ISCE_BURST.yml
+              job_spec/OPERA_DISP_TMS.yml
+              job_spec/ARIA_S1_GUNW.yml
+            instance_types: r6id.xlarge,r6id.2xlarge,r6id.4xlarge,r6id.8xlarge,r6idn.xlarge,r6idn.2xlarge,r6idn.4xlarge,r6idn.8xlarge
+            default_max_vcpus: 1500
+            expanded_max_vcpus: 3000
+            required_surplus: 2000
+            security_environment: EDC
+            ami_id: /ngap/amis/image_id_ecs_al2023_x86
+            distribution_url: 'https://d1riv60tezqha9.cloudfront.net'
+
+    environment:
+      name: ${{ matrix.environment }}
+
     steps:
-      - name: create-json
-        id: create-json
-        uses: jsdaniell/create-json@v1.2.3
-        with:
-          name: "parameters.json"
-          json:
-            foo: bar
-            stuff:
-              hello: world
-              a: b
-      - run: echo parameters.json
+      - uses: actions/checkout@v4.2.2
+
+      - run: |
+          jq -n '{"Parameters": $ARGS.named}' \
+            --args VpcId '${{ secrets.VPC_ID }}' \
+            --args SubnetIds '${{ secrets.SUBNET_IDS }}' \
+            --args SecretArn '${{ secrets.SECRET_ARN }}' \
+            --args ImageTag '${{ matrix.IMAGE_TAG }}' \
+            --args ProductLifetimeInDays '${{ matrix.product_lifetime_in_days }} ' \
+            --args AuthPublicKey '${{ secrets.AUTH_PUBLIC_KEY }}' \
+            --args DefaultCreditsPerUser '${{ matrix.default_credits_per_user }}' \
+            --args DefaultApplicationStatus '${{ matrix.default_application_status }}' \
+            --args DefaultMaxvCpus '${{ matrix.default_max_vcpus }}' \
+            --args ExpandedMaxvCpus '${{ matrix.expanded_max_vcpus }}' \
+            --args MonthlyBudget '${{ secrets.MONTHLY_BUDGET }}'' \
+            --args RequiredSurplus '${{ matrix.required_surplus }}' \
+            --args AmiId '${{ matrix.ami_id }}' \
+            --args InstanceTypes '${{ matrix.instance_types }}' \
+            --args OriginAccessIdentityId '${{ secrets.ORIGIN_ACCESS_IDENTITY_ID }}' \
+            --args DistributionUrl '${{ matrix.distribution_url }}' \
+          > parameters.json
+          echo parameters.json
