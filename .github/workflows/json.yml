@@ -13,19 +13,18 @@ on:
         description: "Name of the deployed stack"
         required: true
 
-runs:
-  jobs:
-    create-json:
-      steps:
-        - name: create-json
-          id: create-json
-          uses: jsdaniell/create-json@v1.2.3
-          with:
-            name: "parameters.json"
-            json:
-              foo: bar
-              stuff:
-                hello: world
-                a: b
-        - run |
-            echo parameters.json
+jobs:
+  create-json:
+    steps:
+      - name: create-json
+        id: create-json
+        uses: jsdaniell/create-json@v1.2.3
+        with:
+          name: "parameters.json"
+          json:
+            foo: bar
+            stuff:
+              hello: world
+              a: b
+      - run |
+          echo parameters.json
