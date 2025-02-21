@@ -15,6 +15,7 @@ on:
 
 jobs:
   create-json:
+    runs-on: ubuntu-latest
     steps:
       - name: create-json
         id: create-json
