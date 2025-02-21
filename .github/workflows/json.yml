@@ -54,7 +54,7 @@ jobs:
             --args DefaultApplicationStatus '${{ matrix.default_application_status }}' \
             --args DefaultMaxvCpus '${{ matrix.default_max_vcpus }}' \
             --args ExpandedMaxvCpus '${{ matrix.expanded_max_vcpus }}' \
-            --args MonthlyBudget '${{ secrets.MONTHLY_BUDGET }}'' \
+            --args MonthlyBudget '${{ secrets.MONTHLY_BUDGET }}' \
             --args RequiredSurplus '${{ matrix.required_surplus }}' \
             --args AmiId '${{ matrix.ami_id }}' \
             --args InstanceTypes '${{ matrix.instance_types }}' \
