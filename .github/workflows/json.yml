@@ -44,21 +44,21 @@ jobs:
 
       - run: |
           jq -n '{"Parameters": $ARGS.named}' \
-            --args VpcId '${{ secrets.VPC_ID }}' \
-            --args SubnetIds '${{ secrets.SUBNET_IDS }}' \
-            --args SecretArn '${{ secrets.SECRET_ARN }}' \
-            --args ImageTag '${{ matrix.IMAGE_TAG }}' \
-            --args ProductLifetimeInDays '${{ matrix.product_lifetime_in_days }} ' \
-            --args AuthPublicKey '${{ secrets.AUTH_PUBLIC_KEY }}' \
-            --args DefaultCreditsPerUser '${{ matrix.default_credits_per_user }}' \
-            --args DefaultApplicationStatus '${{ matrix.default_application_status }}' \
-            --args DefaultMaxvCpus '${{ matrix.default_max_vcpus }}' \
-            --args ExpandedMaxvCpus '${{ matrix.expanded_max_vcpus }}' \
-            --args MonthlyBudget '${{ secrets.MONTHLY_BUDGET }}' \
-            --args RequiredSurplus '${{ matrix.required_surplus }}' \
-            --args AmiId '${{ matrix.ami_id }}' \
-            --args InstanceTypes '${{ matrix.instance_types }}' \
-            --args OriginAccessIdentityId '${{ secrets.ORIGIN_ACCESS_IDENTITY_ID }}' \
-            --args DistributionUrl '${{ matrix.distribution_url }}' \
-          > parameters.json
+            --arg VpcId '${{ secrets.VPC_ID }}' \
+            --arg SubnetIds '${{ secrets.SUBNET_IDS }}' \
+            --arg SecretArn '${{ secrets.SECRET_ARN }}' \
+            --arg ImageTag '${{ matrix.IMAGE_TAG }}' \
+            --arg ProductLifetimeInDays '${{ matrix.product_lifetime_in_days }} ' \
+            --arg AuthPublicKey '${{ secrets.AUTH_PUBLIC_KEY }}' \
+            --arg DefaultCreditsPerUser '${{ matrix.default_credits_per_user }}' \
+            --arg DefaultApplicationStatus '${{ matrix.default_application_status }}' \
+            --arg DefaultMaxvCpus '${{ matrix.default_max_vcpus }}' \
+            --arg ExpandedMaxvCpus '${{ matrix.expanded_max_vcpus }}' \
+            --arg MonthlyBudget '${{ secrets.MONTHLY_BUDGET }}' \
+            --arg RequiredSurplus '${{ matrix.required_surplus }}' \
+            --arg AmiId '${{ matrix.ami_id }}' \
+            --arg InstanceTypes '${{ matrix.instance_types }}' \
+            --arg OriginAccessIdentityId '${{ secrets.ORIGIN_ACCESS_IDENTITY_ID }}' \
+            --arg DistributionUrl '${{ matrix.distribution_url }}' \
+            > parameters.json
           cat parameters.json
