@@ -1,0 +1,29 @@
+name: test json file
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      INPUT_A:
+        description: "S3 Bucket for CloudFormation deployment artifacts"
+        required: true
+      INPUT_B:
+        description: "Name of the deployed stack"
+        required: true
+
+runs:
+  steps:
+    - name: create-json
+      id: create-json
+      uses: jsdaniell/create-json@v1.2.3
+      with:
+        name: "parameters.json"
+        json:
+          foo: bar
+          stuff:
+            hello: world
+            a: b
+    - run |
+        echo parameters.json
