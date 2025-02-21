@@ -61,4 +61,4 @@ jobs:
             --args OriginAccessIdentityId '${{ secrets.ORIGIN_ACCESS_IDENTITY_ID }}' \
             --args DistributionUrl '${{ matrix.distribution_url }}' \
           > parameters.json
-          echo parameters.json
+          cat parameters.json
